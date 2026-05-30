@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EHealth - Premium Hospital Management System">
+    <meta name="theme-color" content="#10b981">
+    
+    <title>EHealth | Professional Hospital Management</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    borderRadius: { '4xl': '2rem' },
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans selection:bg-primary-100 selection:text-primary-900">
+    
+    <!-- Login Screen -->
+    <div id="loginScreen" class="fixed inset-0 z-[100] bg-white flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-md w-full my-8">
+            <div class="text-center mb-10">
+                <div class="w-20 h-20 bg-primary-500 rounded-3xl flex items-center justify-center text-white mx-auto mb-6 shadow-xl shadow-primary-100">
+                    <i data-lucide="hospital" class="w-10 h-10"></i>
+                </div>
+                <h1 class="text-4xl font-display font-bold text-slate-900 mb-2">EHealth Portal</h1>
+                <p class="text-slate-500 font-medium">Welcome to Alishba Hospital Management System</p>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl p-8 md:p-10">
+                <!-- Login Type Toggle -->
+                <div class="flex p-1.5 bg-slate-100 rounded-2xl mb-8">
+                    <button id="patientLoginTab" class="flex-1 py-3 text-sm font-bold rounded-xl transition-all bg-white shadow-sm text-primary-600">Patient</button>
+                    <button id="doctorLoginTab" class="flex-1 py-3 text-sm font-bold rounded-xl transition-all text-slate-500 hover:text-slate-700">Doctor</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300"></i>
+                            <input type="email" id="loginEmail" required placeholder="name@example.com" class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Password</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300"></i>
+                            <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-primary-500 text-white py-4 rounded-2xl font-bold text-lg hover:bg-primary-600 hover:shadow-xl hover:shadow-primary-100 transition-all active:scale-95 flex items-center justify-center gap-2">
+                        Sign In
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </form>
+
+                <!-- Register Link (Patient Only) -->
+                <div id="registerToggle" class="mt-6 text-center">
+                    <p class="text-slate-400 text-sm">Don't have an account? 
+                        <button onclick="toggleRegister()" class="text-primary-600 font-bold hover:underline">Register Now</button>
+                    </p>
+                </div>
+
+                <!-- Registration Form (Patient Only, hidden by default) -->
+                <form id="registerForm" class="space-y-5 hidden mt-6 pt-6 border-t border-slate-100">
+                    <h3 class="text-lg font-display font-bold text-slate-800 text-center">Create Patient Account</h3>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                        <div class="relative">
+                            <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300"></i>
+                            <input type="text" id="regName" required placeholder="Your full name" class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300"></i>
+                            <input type="email" id="regEmail" required placeholder="name@example.com" class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Phone</label>
+                        <div class="relative">
+                            <i data-lucide="phone" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300"></i>
+                            <input type="tel" id="regPhone" required placeholder="+92 300 1234567" class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Password</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300"></i>
+                            <input type="password" id="regPassword" required minlength="6" placeholder="Min 6 characters" class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-primary-500 text-white py-4 rounded-2xl font-bold text-lg hover:bg-primary-600 hover:shadow-xl hover:shadow-primary-100 transition-all active:scale-95">
+                        Create Account
+                    </button>
+                    <p class="text-center text-slate-400 text-sm">Already have an account? 
+                        <button type="button" onclick="toggleRegister()" class="text-primary-600 font-bold hover:underline">Sign In</button>
+                    </p>
+                </form>
+
+                <!-- Demo Credentials -->
+                <div class="mt-8 pt-6 border-t border-slate-50 text-center space-y-1">
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Demo Credentials</p>
+                    <p class="text-slate-500 text-sm">Doctor: <span class="text-slate-700 font-semibold">dr.sarah@ehealth.com</span> / <span class="text-slate-700 font-semibold">doc123</span></p>
+                    <p class="text-slate-500 text-sm">Patient: <span class="text-slate-700 font-semibold">patient@demo.com</span> / <span class="text-slate-700 font-semibold">pat123</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="min-h-screen flex flex-col hidden">
+        <!-- Header -->
+        <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex items-center gap-3 group cursor-pointer" onclick="showPage('home')">
+                        <div class="w-12 h-12 bg-primary-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary-200">
+                            <i data-lucide="heart-pulse" class="w-7 h-7"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <h1 class="text-2xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400">EHealth</h1>
+                            <span class="text-[10px] uppercase tracking-widest font-bold text-slate-400">by Alishba</span>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav class="hidden md:flex items-center gap-1 bg-slate-100 p-1.5 rounded-2xl">
+                        <button class="nav-btn active px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200" data-page="home">Home</button>
+                        <button class="nav-btn px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 patient-only" data-page="doctors">Doctors</button>
+                        <button class="nav-btn px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200" data-page="appointments">My Appointments</button>
+                    </nav>
+
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-3 mr-4">
+                            <div class="text-right hidden sm:block">
+                                <p id="userNameDisplay" class="text-sm font-bold text-slate-800">User Name</p>
+                                <p id="userRoleDisplay" class="text-[10px] uppercase tracking-wider font-bold text-primary-500">Patient</p>
+                            </div>
+                            <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-400">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-500 transition-colors">
+                            <i data-lucide="log-out" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow">
+            <!-- Home Page -->
+            <section id="home" class="page active py-12 lg:py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Hero -->
+                    <div class="relative overflow-hidden bg-gradient-to-br from-primary-600 to-primary-400 rounded-[3rem] p-8 md:p-16 lg:p-20 text-white shadow-2xl shadow-primary-200 mb-20">
+                        <div class="relative z-10 max-w-2xl">
+                            <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider mb-6">Professional Hospital Management</span>
+                            <h2 class="text-4xl md:text-6xl font-display font-bold leading-tight mb-6">
+                                Efficient Care <br> Smarter Decisions.
+                            </h2>
+                            <p class="text-lg md:text-xl text-primary-50 opacity-90 mb-10 leading-relaxed">
+                                Manage your health and consultations with EHealth by Alishba. A unified platform for doctors and patients.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <button onclick="showPage('doctors')" class="bg-white text-primary-600 px-8 py-4 rounded-2xl text-lg font-bold hover:shadow-2xl hover:-translate-y-1 transition-all active:scale-95 patient-only">
+                                    Book Appointment
+                                </button>
+                                <button onclick="showPage('appointments')" class="bg-primary-700/30 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-2xl text-lg font-bold hover:bg-primary-700/50 transition-all">
+                                    View Dashboard
+                                </button>
+                            </div>
+                        </div>
+                        <div class="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-primary-300/20 rounded-full blur-2xl"></div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div id="statsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Doctors Page -->
+            <section id="doctors" class="page hidden py-12 lg:py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                        <div class="max-w-xl">
+                            <h2 class="text-4xl font-display font-bold mb-4">Our Medical Specialists</h2>
+                            <p class="text-slate-500 text-lg">Find the right doctor for your health needs. Filter by specialty.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <div class="relative min-w-[280px]">
+                                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                                <input type="text" id="searchDoctor" placeholder="Search by name or hospital..." class="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm">
+                            </div>
+                            <div class="relative">
+                                <select id="specialtyFilter" class="pl-6 pr-12 py-4 bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm appearance-none cursor-pointer min-w-[200px]">
+                                    <option value="">All Specialties</option>
+                                    <option value="cardiology">Cardiology</option>
+                                    <option value="dermatology">Dermatology</option>
+                                    <option value="neurology">Neurology</option>
+                                    <option value="orthopedics">Orthopedics</option>
+                                    <option value="pediatrics">Pediatrics</option>
+                                    <option value="psychiatry">Psychiatry</option>
+                                    <option value="general">General Medicine</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="doctorsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appointments Dashboard Page -->
+            <section id="appointments" class="page hidden py-12 lg:py-20">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center mb-12">
+                        <div>
+                            <h2 class="text-4xl font-display font-bold mb-2">Appointments Dashboard</h2>
+                            <p class="text-slate-500 text-lg">Manage and track healthcare consultations.</p>
+                        </div>
+                        <div class="hidden sm:flex gap-3">
+                            <div class="p-4 bg-white border border-slate-100 rounded-2xl text-center min-w-[120px] shadow-sm">
+                                <span class="block text-2xl font-bold text-primary-500" id="totalAptCount">0</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total</span>
+                            </div>
+                            <div class="p-4 bg-white border border-slate-100 rounded-2xl text-center min-w-[120px] shadow-sm">
+                                <span class="block text-2xl font-bold text-amber-500" id="pendingAptCount">0</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="appointmentsList" class="space-y-6">
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Booking Modal -->
+        <div id="bookingModal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4">
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+            <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden transform transition-all" id="modalContainer">
+                <div class="absolute top-6 right-6">
+                    <button onclick="closeModal()" class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-500 rounded-full hover:bg-slate-200 hover:text-slate-700 transition-all">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="p-8 md:p-10">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-display font-bold mb-2">Book Appointment</h2>
+                        <p class="text-slate-500 text-sm">Select your preferred schedule for consultation.</p>
+                    </div>
+                    <div id="selectedDoctor" class="mb-8 p-5 bg-primary-50 rounded-2xl border border-primary-100 flex items-center gap-4"></div>
+                    <form id="bookingForm" class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-2">
+                                <label for="patientName" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Full Name</label>
+                                <input type="text" id="patientName" required class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="patientPhone" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Phone Number</label>
+                                <input type="tel" id="patientPhone" required class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-2">
+                                <label for="appointmentDate" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Date</label>
+                                <input type="date" id="appointmentDate" required class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="appointmentTime" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Time Slot</label>
+                                <select id="appointmentTime" required class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl appearance-none cursor-pointer">
+                                    <option value="09:00">09:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="14:00">02:00 PM</option>
+                                    <option value="15:00">03:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-primary-500 text-white py-4 rounded-2xl font-bold hover:bg-primary-600 transition-all active:scale-95 mt-4">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[2000] px-8 py-4 bg-slate-900 text-white rounded-2xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-500 flex items-center gap-3 font-semibold"></div>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-slate-200 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary-500 rounded-xl flex items-center justify-center text-white">
+                            <i data-lucide="heart-pulse" class="w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-xl font-display font-bold">EHealth</h2>
+                    </div>
+                    <p class="text-slate-400 text-sm font-medium">© 2024 EHealth Hospital Management. Elevating Healthcare.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="google-sheet.js"></script>
+    <script src="app.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
